@@ -1,7 +1,7 @@
 package com.fco.microservices.msavaliadorcredito.domain.model;
 
-import com.fco.microservices.msavaliadorcredito.application.resource.representation.CartaoCliente;
-import com.fco.microservices.msavaliadorcredito.application.resource.representation.DadosCliente;
+import com.fco.microservices.msavaliadorcredito.application.representation.CartaoCliente;
+import com.fco.microservices.msavaliadorcredito.application.representation.DadosCliente;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

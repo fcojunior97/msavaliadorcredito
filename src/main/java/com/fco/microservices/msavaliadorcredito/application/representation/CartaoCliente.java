@@ -1,4 +1,4 @@
-package com.fco.microservices.msavaliadorcredito.application.resource.representation;
+package com.fco.microservices.msavaliadorcredito.application.representation;
 
 import lombok.Getter;
 import lombok.Setter;

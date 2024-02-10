@@ -1,6 +1,6 @@
 package com.fco.microservices.msavaliadorcredito.infra.clients;
 
-import com.fco.microservices.msavaliadorcredito.application.resource.representation.DadosCliente;
+import com.fco.microservices.msavaliadorcredito.application.representation.DadosCliente;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
