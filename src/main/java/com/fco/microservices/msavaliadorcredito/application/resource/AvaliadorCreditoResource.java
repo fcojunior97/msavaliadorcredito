@@ -2,7 +2,10 @@ package com.fco.microservices.msavaliadorcredito.application.resource;
 
 import com.fco.microservices.msavaliadorcredito.application.ex.DadosClienteNotFoundException;
 import com.fco.microservices.msavaliadorcredito.application.ex.ErroComunicao;
+import com.fco.microservices.msavaliadorcredito.application.ex.ErroSolicitacaoCartaoException;
 import com.fco.microservices.msavaliadorcredito.application.representation.DadosAvaliacao;
+import com.fco.microservices.msavaliadorcredito.application.representation.DadosSolicitacaoEmissaoCartao;
+import com.fco.microservices.msavaliadorcredito.application.representation.ProtocoloSolicitacaoCartao;
 import com.fco.microservices.msavaliadorcredito.application.representation.RetornoAvaliacaoCliente;
 import com.fco.microservices.msavaliadorcredito.application.service.AvaliadorCreditoService;
 import com.fco.microservices.msavaliadorcredito.domain.model.SituacaoCliente;
@@ -42,5 +45,16 @@ public class AvaliadorCreditoResource {
             return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
         }
 
+    }
+
+    @PostMapping("solicitacoes-cartao")
+    public ResponseEntity solicitarCartao (@RequestBody DadosSolicitacaoEmissaoCartao dados) {
+
+        try {
+            ProtocoloSolicitacaoCartao protocoloSolicitacaoCartao = avaliadorCreditoService.solicitarEmissaoCartao(dados);
+            return ResponseEntity.ok(protocoloSolicitacaoCartao);
+        }catch (ErroSolicitacaoCartaoException e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 }

@@ -2,10 +2,12 @@ package com.fco.microservices.msavaliadorcredito.application.service;
 
 import com.fco.microservices.msavaliadorcredito.application.ex.DadosClienteNotFoundException;
 import com.fco.microservices.msavaliadorcredito.application.ex.ErroComunicao;
+import com.fco.microservices.msavaliadorcredito.application.ex.ErroSolicitacaoCartaoException;
 import com.fco.microservices.msavaliadorcredito.application.representation.*;
 import com.fco.microservices.msavaliadorcredito.domain.model.SituacaoCliente;
 import com.fco.microservices.msavaliadorcredito.infra.clients.CartoesResourceClient;
 import com.fco.microservices.msavaliadorcredito.infra.clients.ClienteResourceClient;
+import com.fco.microservices.msavaliadorcredito.infra.mqueue.SolicitacaoEmissaoCartaoPublisher;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +27,9 @@ public class AvaliadorCreditoService {
 
     @Autowired
     private CartoesResourceClient cartoesResourceClient;
+
+    @Autowired
+    private SolicitacaoEmissaoCartaoPublisher solicitacaoEmissaoCartaoPublisher;
 
     public SituacaoCliente obterSituacaoCliente(String cpf) throws DadosClienteNotFoundException, ErroComunicao {
 
@@ -85,6 +91,19 @@ public class AvaliadorCreditoService {
             throw new ErroComunicao(e.getMessage(), status);
         }
 
+    }
+
+    public ProtocoloSolicitacaoCartao solicitarEmissaoCartao(DadosSolicitacaoEmissaoCartao dados) {
+
+        try {
+            solicitacaoEmissaoCartaoPublisher.solicitarCartao(dados);
+            var protocolo = UUID.randomUUID().toString();
+
+            return new ProtocoloSolicitacaoCartao(protocolo);
+
+        }catch (Exception e) {
+            throw new ErroSolicitacaoCartaoException(e.getMessage());
+        }
     }
 
 
